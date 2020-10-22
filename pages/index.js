@@ -5,6 +5,7 @@ import { useEffect, useContext } from "react";
 import { TodosContext } from "../contexts/TodosContext";
 import { table, minifyRecords } from "./api/utils/Airtable";
 import auth0 from "./api/utils/auth0";
+import TodoForm from "../components/TodoForm";
 
 export default function Home({ initialTodos, user }) {
   const { todos, setTodos } = useContext(TodosContext);
@@ -17,14 +18,20 @@ export default function Home({ initialTodos, user }) {
     <div>
       <Head>
         <title>Authenticated TODO App</title>
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar user={user} />
       <main>
-        <h1>Todo App</h1>
-        <ul>
-          {todos && todos.map((todo) => <Todo key={todo.id} todo={todo} />)}
-        </ul>
+        {user ? (
+          <>
+            <h1>{`${user.nickname} Todos`}</h1>
+            <TodoForm />
+            <ul>
+              {todos && todos.map((todo) => <Todo todo={todo} key={todo.id} />)}
+            </ul>
+          </>
+        ) : (
+          <p className="text-center mt-4">Please login to save todos!</p>
+        )}
       </main>
     </div>
   );
