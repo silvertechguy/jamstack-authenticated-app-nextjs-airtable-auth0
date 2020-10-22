@@ -3,7 +3,7 @@ import Navbar from "../components/Navbar";
 import Todo from "../components/Todo";
 import { useEffect, useContext } from "react";
 import { TodosContext } from "../contexts/TodosContext";
-import { table, minifyRecords } from "./api/utils/Airtable";
+import { table, minifyRecords } from "./api/utils/airtable";
 import auth0 from "./api/utils/auth0";
 import TodoForm from "../components/TodoForm";
 
