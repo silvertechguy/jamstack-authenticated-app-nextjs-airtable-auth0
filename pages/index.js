@@ -23,7 +23,9 @@ export default function Home({ initialTodos, user }) {
       <main>
         {user ? (
           <>
-            <h1>{`${user.nickname} Todos`}</h1>
+            <h1>{`${
+              user.nickname.charAt(0).toUpperCase() + user.nickname.slice(1)
+            } Todos`}</h1>
             <TodoForm />
             <ul>
               {todos && todos.map((todo) => <Todo todo={todo} key={todo.id} />)}
@@ -39,8 +41,13 @@ export default function Home({ initialTodos, user }) {
 
 export async function getServerSideProps(context) {
   const session = await auth0.getSession(context.req);
+  let todos = [];
   try {
-    const todos = await table.select({}).firstPage();
+    if (session?.user) {
+      todos = await table
+        .select({ filterByFormula: `userId = '${session.user.sub}'` })
+        .firstPage();
+    }
     return {
       props: {
         initialTodos: minifyRecords(todos),
